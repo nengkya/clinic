@@ -1,14 +1,19 @@
 from django.db import models
 from django.utils import timezone
-# Create your models here.
+
+
+#Create your models here.
+
 GENDER_CHOICES = (
     ("Male", "Male"),
     ("Female", "Female"),
 )
+
 SHIFT_CHOICES = (
     ("Day", "Day"),
     ("Night", "Night"),
 )
+
 STAFF_CHOICES = (
     ("Nurse", "Nurse"),
     ("Clinical Officer", "Clinical Officer"),
@@ -19,13 +24,14 @@ STAFF_CHOICES = (
     ("Counselor", "Counselor"),
     ("Nutritionist", "Nutritionist"),
 )
+
+
 class BaseInfo(models.Model):
     id_number = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
     phone = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
-    
 
     class Meta:
         abstract = True
@@ -45,10 +51,12 @@ class Patient(BaseInfo):
     def __str__(self):
         return self.name
 
+
 CONTRACT_CHOICES = (
     ("Temporary", "Temporary"),
     ("Permanent", "Permanent"),
 )
+
 
 class Supplier(models.Model):
     name = models.CharField(max_length=500)
@@ -67,6 +75,7 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.name
+
     
 class Drug(models.Model):
     drug_code = models.CharField(max_length=200)
@@ -85,6 +94,7 @@ class Drug(models.Model):
     def __str__(self):
         return self.drug_name    
 
+
 class Prescription(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     prescribed_by = models.ForeignKey(Staff, on_delete=models.CASCADE)
@@ -94,6 +104,7 @@ class Prescription(models.Model):
 
     def __str__(self):
         return self.patient.name + " "+ str(self.prescribed_drug)
+
 
 class Appointment(models.Model):
     id_number = models.CharField(max_length=200)
@@ -108,12 +119,14 @@ class Appointment(models.Model):
     def __str__(self):
         return self.name
 
+
 class PatientVisit(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     visit_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.patient.name
+
 
 class PatientBill(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -124,6 +137,7 @@ class PatientBill(models.Model):
     def __str__(self):
         return self.patient.name
 
+
 class PatientFeedback(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     comment = models.TextField()
@@ -131,6 +145,7 @@ class PatientFeedback(models.Model):
 
     def __str__(self):
         return self.patient.name
+
     
 class HealthHistory(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
@@ -138,4 +153,3 @@ class HealthHistory(models.Model):
 
     def __str__(self):
         return self.patient.name
-
